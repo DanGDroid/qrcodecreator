@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">QrCodeCreator</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="qr_code_title">SCAN THIS QRCODE TO CONNECT WIFI</string>
+</resources>
