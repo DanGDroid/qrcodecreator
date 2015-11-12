@@ -1,4 +1,4 @@
-package com.example.daniel.qrcodecreator;
+package com.example.daniel.qrcodecreator.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,6 +10,9 @@ import android.text.InputType;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.daniel.qrcodecreator.MyWifiProperties;
+import com.example.daniel.qrcodecreator.R;
+import com.example.daniel.qrcodecreator.fragments.WifiListFragment;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -24,12 +27,13 @@ public class CreateQrActivity extends AppCompatActivity {
     private String passwordInput;
     private ImageView qrIv;
     private MyWifiProperties myWifi;
+    private WifiListFragment mWifiListFragment;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.qr_layout);
+        setContentView(R.layout.activity_qr_code);
         myWifi = new MyWifiProperties(this);
         qrIv = (ImageView) findViewById(R.id.qr_iv);
         if (myWifi.getType().equals("nopass"))
@@ -37,6 +41,7 @@ public class CreateQrActivity extends AppCompatActivity {
         else
             showPasswordDialog();
     }
+
 
     private BitMatrix createQr(String qrString) {
         QRCodeWriter writer = new QRCodeWriter();
@@ -63,6 +68,7 @@ public class CreateQrActivity extends AppCompatActivity {
     }
 
     private void showPasswordDialog() {
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("WIFI CONNECTION: " + myWifi.getSsid());
