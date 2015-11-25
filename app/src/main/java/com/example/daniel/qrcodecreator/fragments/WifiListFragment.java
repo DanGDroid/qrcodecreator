@@ -4,7 +4,10 @@ package com.example.daniel.qrcodecreator.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,9 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.daniel.qrcodecreator.MyWifiProperties;
 import com.example.daniel.qrcodecreator.R;
+import com.example.daniel.qrcodecreator.WifiConfigManager;
 import com.example.daniel.qrcodecreator.activities.MainActivity;
 import com.example.daniel.qrcodecreator.adapters.WifiListAdapter;
 
@@ -33,7 +38,7 @@ public class WifiListFragment extends Fragment {
 
     private String passwordInput;
     private ImageView qrIv;
-   // private MyWifiProperties myWifi;
+    // private MyWifiProperties myWifi;
     private RecyclerView mRecyclerView;
     private WifiListAdapter adapter;
 
@@ -42,23 +47,24 @@ public class WifiListFragment extends Fragment {
         WifiListFragment fragment = new WifiListFragment();
         return fragment;
     }
-/*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        myWifi = new MyWifiProperties(getActivity());
-    }
-*/
+
+    /*
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            myWifi = new MyWifiProperties(getActivity());
+        }
+    */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_wifi_list,container,false);
+        View view = inflater.inflate(R.layout.fragment_wifi_list, container, false);
         findViews(view);
         if (adapter != null) {
 
             adapter.notifyDataSetChanged();
             mRecyclerView.setAdapter(adapter);
         } else {
-            adapter = new WifiListAdapter(getWifiList(),this);
+            adapter = new WifiListAdapter(getWifiList(), this);
             mRecyclerView.setAdapter(adapter);
         }
         return view;
@@ -89,8 +95,8 @@ public class WifiListFragment extends Fragment {
                     myWifi.setType("WEP");
                 if (rawString.contains("WPA"))
                     myWifi.setType("WPA");
-                if(myWifi.getType() != null)
-                     wifiList.add(myWifi);
+                if (myWifi.getType() != null)
+                    wifiList.add(myWifi);
             }
             return wifiList;
         }
@@ -111,7 +117,10 @@ public class WifiListFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 passwordInput = input.getText().toString();
-                ((MainActivity)getActivity()).addQrCodeFragment(myWifi,passwordInput);
+                myWifi.setPassword(passwordInput);
+                //TODO fix check password vlidity//
+                //connectToWifi(myWifi);
+                ((MainActivity) getActivity()).addQrCodeFragment(myWifi, passwordInput);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -130,7 +139,8 @@ public class WifiListFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 passwordInput = "";
-                ((MainActivity)getActivity()).addQrCodeFragment(myWifi,passwordInput);
+                myWifi.setPassword(passwordInput);
+               connectToWifi(myWifi);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -142,5 +152,31 @@ public class WifiListFragment extends Fragment {
         builder.show();
     }
 
+    private boolean isConnected() {
+
+        ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return mWifi.isConnected();
+    }
+
+    public  void connectToWifi(final MyWifiProperties myWifiProperties) {
+
+        if (myWifiProperties != null) {
+            new WifiConfigManager((WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE)
+                    , new MainActivity.Listener() {
+                @Override
+                public void getResult(Object item) {
+
+                    if(isConnected())
+                        ((MainActivity) getActivity()).addQrCodeFragment(myWifiProperties, passwordInput);
+                    else
+                        Toast.makeText(getActivity(),"Try Another Password",Toast.LENGTH_SHORT).show();
+                }
+            }).execute(myWifiProperties);
+
+        } else {
+            Log.d("WifiSpark", "Wrong Wifi Params cannot parse!!");
+        }
+    }
 }
 

@@ -72,9 +72,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.ViewHo
                             fragment.showPasswordDialog(myWifiProperties);
 
                     }
-                        //Show this wifi dialog with this wifi properties
-                    //and change fragment after dialog
-                       // mainActivity.changeFragment(VideoClipDetailFragment.newInstance(videoClip), false);
 
                 }
             });

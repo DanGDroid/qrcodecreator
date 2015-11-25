@@ -47,4 +47,10 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    public interface Listener <T>{
+
+        void getResult(T item);
+    }
+
+
 }
