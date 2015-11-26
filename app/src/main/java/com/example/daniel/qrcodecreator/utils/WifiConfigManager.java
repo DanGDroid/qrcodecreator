@@ -1,4 +1,4 @@
-package com.example.daniel.qrcodecreator;
+package com.example.daniel.qrcodecreator.utils;
 
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -13,10 +13,10 @@ import java.util.regex.Pattern;
 /**
  * Created by Daniel on 09/11/2015.
  */
-public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,Object> {
+public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,Boolean> {
 
 
-    private MainActivity.Listener<Object> listener;
+    private MainActivity.Listener<Boolean> listener;
 
     private static final String TAG = WifiConfigManager.class.getSimpleName();
     private static final Pattern HEX_DIGITS = Pattern.compile("[0-9A-Fa-f]+");
@@ -30,7 +30,7 @@ public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,O
 
 
     @Override
-    protected Object doInBackground(MyWifiProperties... args) {
+    protected Boolean doInBackground(MyWifiProperties... args) {
         MyWifiProperties theWifiResult = args[0];
         Log.i("WIFI INFO","SSID:"+theWifiResult.getSsid());
         Log.i("WIFI INFO","PASSWORD:"+theWifiResult.getPassword());
@@ -84,16 +84,17 @@ public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,O
     }
 
     @Override
-    protected void onPostExecute(Object o) {
+    protected void onPostExecute(Boolean aBoolean) {
 
-        listener.getResult(o);
+        listener.getResult(aBoolean);
     }
+
 
     /**
      * Update the network: either create a new network or modify an existing network
      * @param config the new network configuration
      */
-    private static void updateNetwork(WifiManager wifiManager, WifiConfiguration config) {
+    private static boolean updateNetwork(WifiManager wifiManager, WifiConfiguration config) {
         Integer foundNetworkID = findNetworkInExistingConfig(wifiManager, config.SSID);
         if (foundNetworkID != null) {
             Log.i(TAG, "Removing old configuration for network " + config.SSID);
@@ -106,11 +107,14 @@ public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,O
             if (wifiManager.enableNetwork(networkId, true)) {
                 Log.i(TAG, "Associating to network " + config.SSID);
                 wifiManager.saveConfiguration();
+                return true;
             } else {
                 Log.w(TAG, "Failed to enable network " + config.SSID);
+                return false;
             }
         } else {
             Log.w(TAG, "Unable to add network " + config.SSID);
+            return false;
         }
     }
 
@@ -130,7 +134,7 @@ public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,O
 
 
     // Adding a WEP network
-    private static void changeNetworkWEP(WifiManager wifiManager, MyWifiProperties wifiResult) {
+    private static boolean changeNetworkWEP(WifiManager wifiManager, MyWifiProperties wifiResult) {
         WifiConfiguration config = changeNetworkCommon(wifiResult);
         config.wepKeys[0] = quoteNonHex(wifiResult.getPassword(), 10, 26, 58);
         config.wepTxKeyIndex = 0;
@@ -140,12 +144,12 @@ public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,O
         config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
         config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
         config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-        updateNetwork(wifiManager, config);
+        return (updateNetwork(wifiManager, config));
     }
 
 
     // Adding a WPA or WPA2 network
-    private static void changeNetworkWPA(WifiManager wifiManager, MyWifiProperties wifiResult) {
+    private static boolean changeNetworkWPA(WifiManager wifiManager, MyWifiProperties wifiResult) {
         WifiConfiguration config = changeNetworkCommon(wifiResult);
         // Hex passwords that are 64 bits long are not to be quoted.
         config.preSharedKey = quoteNonHex(wifiResult.getPassword(), 64);
@@ -158,15 +162,15 @@ public final class WifiConfigManager extends AsyncTask<MyWifiProperties,Object,O
         config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
         config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-        updateNetwork(wifiManager, config);
+        return (updateNetwork(wifiManager, config));
     }
 
 
     // Adding an open, unsecured network
-    private static void changeNetworkUnEncrypted(WifiManager wifiManager, MyWifiProperties wifiResult) {
+    private static boolean changeNetworkUnEncrypted(WifiManager wifiManager, MyWifiProperties wifiResult) {
         WifiConfiguration config = changeNetworkCommon(wifiResult);
         config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-        updateNetwork(wifiManager, config);
+        return(updateNetwork(wifiManager, config));
     }
 
 

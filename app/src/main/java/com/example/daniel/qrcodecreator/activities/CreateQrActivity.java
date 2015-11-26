@@ -10,7 +10,7 @@ import android.text.InputType;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.daniel.qrcodecreator.MyWifiProperties;
+import com.example.daniel.qrcodecreator.utils.MyWifiProperties;
 import com.example.daniel.qrcodecreator.R;
 import com.example.daniel.qrcodecreator.fragments.WifiListFragment;
 import com.google.zxing.BarcodeFormat;

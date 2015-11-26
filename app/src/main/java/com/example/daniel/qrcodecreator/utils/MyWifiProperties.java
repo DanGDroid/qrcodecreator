@@ -1,4 +1,4 @@
-package com.example.daniel.qrcodecreator;
+package com.example.daniel.qrcodecreator.utils;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;

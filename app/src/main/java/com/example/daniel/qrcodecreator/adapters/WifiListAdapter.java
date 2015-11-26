@@ -1,16 +1,13 @@
 package com.example.daniel.qrcodecreator.adapters;
 
-import android.content.Context;
-import android.net.wifi.ScanResult;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.daniel.qrcodecreator.MyWifiProperties;
+import com.example.daniel.qrcodecreator.utils.MyWifiProperties;
 import com.example.daniel.qrcodecreator.R;
 import com.example.daniel.qrcodecreator.fragments.WifiListFragment;
 

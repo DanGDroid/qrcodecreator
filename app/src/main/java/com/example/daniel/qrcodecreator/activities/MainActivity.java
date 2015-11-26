@@ -1,12 +1,9 @@
 package com.example.daniel.qrcodecreator.activities;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.daniel.qrcodecreator.MyWifiProperties;
+import com.example.daniel.qrcodecreator.utils.MyWifiProperties;
 import com.example.daniel.qrcodecreator.R;
 import com.example.daniel.qrcodecreator.fragments.CreateQrFragment;
 import com.example.daniel.qrcodecreator.fragments.QrCodeFragment;

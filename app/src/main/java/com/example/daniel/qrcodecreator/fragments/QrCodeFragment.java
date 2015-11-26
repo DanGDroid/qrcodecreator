@@ -10,9 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.daniel.qrcodecreator.MyWifiProperties;
+import com.example.daniel.qrcodecreator.utils.MyWifiProperties;
 import com.example.daniel.qrcodecreator.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;

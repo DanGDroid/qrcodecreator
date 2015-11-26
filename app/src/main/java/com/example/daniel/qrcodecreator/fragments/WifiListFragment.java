@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,9 +21,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.daniel.qrcodecreator.MyWifiProperties;
+import com.example.daniel.qrcodecreator.utils.MyWifiProperties;
 import com.example.daniel.qrcodecreator.R;
-import com.example.daniel.qrcodecreator.WifiConfigManager;
+import com.example.daniel.qrcodecreator.utils.WifiConfigManager;
 import com.example.daniel.qrcodecreator.activities.MainActivity;
 import com.example.daniel.qrcodecreator.adapters.WifiListAdapter;
 

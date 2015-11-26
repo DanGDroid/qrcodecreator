@@ -1,4 +1,4 @@
-package com.example.daniel.qrcodecreator;
+package com.example.daniel.qrcodecreator.utils;
 
 /**
  * Created by Daniel on 09/11/2015.
