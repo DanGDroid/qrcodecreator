@@ -3,6 +3,7 @@ package com.example.daniel.qrcodecreator.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,18 +46,28 @@ public class Loginfragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         Log.d("Login", et.getText().toString());
-        if (!et.getText().toString().isEmpty()) {
-            hideKeyboard();
-            ((MainActivity) getActivity()).addCreateQrFragment(et.getText().toString());
-            et.setText("");
+        String emailInput = et.getText().toString();
+        if (!emailInput.isEmpty()) {
+            if(isValidEmail(emailInput)) {
+                hideKeyboard();
+                ((MainActivity) getActivity()).addCreateQrFragment(emailInput);
+            }else {
+                Toast.makeText(getActivity(), "email IS NOT VALID", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(getActivity(), "NO email ENTERED", Toast.LENGTH_SHORT).show();
         }
+        et.setText("");
 
     }
 
-
-
+    public final static boolean isValidEmail(CharSequence target) {
+        if (TextUtils.isEmpty(target)) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
 
     public void hideKeyboard() {
 
