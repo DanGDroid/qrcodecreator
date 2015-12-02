@@ -14,7 +14,19 @@ import java.util.List;
  */
 public class MyWifiProperties implements Serializable {
 
-    private String type, ssid,password;
+    private String type;
+    private String ssid;
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    private String username;
     private Context context;
 
     public MyWifiProperties() {

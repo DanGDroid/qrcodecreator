@@ -23,11 +23,12 @@ import com.google.zxing.qrcode.QRCodeWriter;
  */
 public class QrCodeFragment extends Fragment {
 
-    public static QrCodeFragment newInstance(MyWifiProperties myWifiProperties,String password){
+    public static QrCodeFragment newInstance(MyWifiProperties myWifiProperties,String password,String username){
         Bundle args = new Bundle();
         QrCodeFragment fragment = new QrCodeFragment();
         args.putString("pass",password);
-        args.putSerializable("wifi",myWifiProperties);
+        args.putSerializable("wifi", myWifiProperties);
+        args.putString("username", username);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,9 +46,10 @@ public class QrCodeFragment extends Fragment {
         //TextView title = (TextView) view.findViewById(R.id.qr_title_tv);
         MyWifiProperties myWifi = (MyWifiProperties) getArguments().getSerializable("wifi");
         String passwordInput = getArguments().getString("pass");
+        String usernameInput = getArguments().getString("username");
         ImageView qrImage = (ImageView) view.findViewById(R.id.qr_iv);
         qrImage.setImageBitmap(toBitmap(createQr(
-                qrCodeString(myWifi.getType(), myWifi.getSsid(), passwordInput))));
+                qrCodeString(myWifi.getType(), myWifi.getSsid(), passwordInput,usernameInput))));
     }
 
     private BitMatrix createQr(String qrString) {
@@ -74,7 +76,7 @@ public class QrCodeFragment extends Fragment {
         return bmp;
     }
 
-    private String qrCodeString(String type, String ssid, String password) {
-        return "WIFI:T:" + type + ";S:" + ssid + ";P:" + password + ";;";
+    private String qrCodeString(String type, String ssid, String password,String username) {
+        return "WIFI:T:" + type + ";S:" + ssid + ";P:" + password +";U:"+username+";;";
     }
 }

@@ -36,14 +36,18 @@ import java.util.List;
 public class WifiListFragment extends Fragment {
 
     private String passwordInput;
+    private String usernameInput;
     private ImageView qrIv;
     // private MyWifiProperties myWifi;
     private RecyclerView mRecyclerView;
     private WifiListAdapter adapter;
 
 
-    public static WifiListFragment newInstance() {
+    public static WifiListFragment newInstance(String username) {
+        Bundle args = new Bundle();
         WifiListFragment fragment = new WifiListFragment();
+        args.putString("username", username);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -57,6 +61,7 @@ public class WifiListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wifi_list, container, false);
+        usernameInput = getArguments().getString("username");
         findViews(view);
         if (adapter != null) {
 
@@ -119,7 +124,7 @@ public class WifiListFragment extends Fragment {
                 myWifi.setPassword(passwordInput);
                 //TODO fix check password vlidity//
                 //connectToWifi(myWifi);
-                ((MainActivity) getActivity()).addQrCodeFragment(myWifi, passwordInput);
+                ((MainActivity) getActivity()).addQrCodeFragment(myWifi, passwordInput,usernameInput);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -139,7 +144,7 @@ public class WifiListFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 passwordInput = "";
                 myWifi.setPassword(passwordInput);
-               connectToWifi(myWifi);
+              // connectToWifi(myWifi);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -167,7 +172,7 @@ public class WifiListFragment extends Fragment {
                 public void getResult(Object item) {
 
                     if(isConnected())
-                        ((MainActivity) getActivity()).addQrCodeFragment(myWifiProperties, passwordInput);
+                        ((MainActivity) getActivity()).addQrCodeFragment(myWifiProperties, passwordInput,usernameInput);
                     else
                         Toast.makeText(getActivity(),"Try Another Password",Toast.LENGTH_SHORT).show();
                 }
